@@ -23,7 +23,11 @@ export class AuthController {
   @Post('login')
   @UsePipes(ValidationPipe)
   login(@Body() loginUserDto: LoginUserDto): Promise<any> {
-    console.log(loginUserDto);
     return this.authService.login(loginUserDto);
+  }
+
+  @Post('refresh-token')
+  refreshToken(@Body() { refresh_token }): Promise<any> {
+    return this.authService.refreshToken(refresh_token);
   }
 }
