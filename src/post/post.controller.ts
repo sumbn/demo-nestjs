@@ -18,7 +18,7 @@ import { extname } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
 import { FilterPostDto } from 'src/post/dto/filter-post.dto';
-import { updatePostDto } from 'src/post/dto/update-post.dto';
+import { UpdatePostDto } from 'src/post/dto/update-post.dto';
 import { Post as PostEntity } from 'src/post/entities/post.entity';
 import { PostService } from 'src/post/post.service';
 
@@ -111,7 +111,7 @@ export class PostController {
   update(
     @Param('id') id: string,
     @Req() req: any,
-    @Body() updatePostDto: updatePostDto,
+    @Body() updatePostDto: UpdatePostDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
     if (req.fileValidationError) {
@@ -119,7 +119,7 @@ export class PostController {
     }
 
     if (file) {
-      updatePostDto.thumbnail = file.destination + '/' + file.fieldname;
+      updatePostDto.thumbnail = file.destination + '/' + file.filename;
     }
 
     return this.postService.update(Number(id), updatePostDto);

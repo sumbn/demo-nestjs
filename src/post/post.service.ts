@@ -5,7 +5,7 @@ import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
 import { Like, Repository, UpdateResult } from 'typeorm';
 import { FilterPostDto } from 'src/post/dto/filter-post.dto';
-import { updatePostDto } from 'src/post/dto/update-post.dto';
+import { UpdatePostDto } from 'src/post/dto/update-post.dto';
 
 @Injectable()
 export class PostService {
@@ -86,7 +86,7 @@ export class PostService {
 
   async update(
     id: number,
-    updatePostDto: updatePostDto,
+    updatePostDto: UpdatePostDto,
   ): Promise<UpdateResult> {
     return await this.postRepository.update(id, updatePostDto);
   }

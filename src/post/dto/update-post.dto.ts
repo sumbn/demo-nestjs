@@ -1,4 +1,4 @@
-export class updatePostDto {
+export class UpdatePostDto {
   title: string;
   description: string;
   thumbnail: string;
