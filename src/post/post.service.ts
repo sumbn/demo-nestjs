@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
-import { Like, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, Like, Repository, UpdateResult } from 'typeorm';
 import { FilterPostDto } from 'src/post/dto/filter-post.dto';
 import { UpdatePostDto } from 'src/post/dto/update-post.dto';
 
@@ -89,5 +89,9 @@ export class PostService {
     updatePostDto: UpdatePostDto,
   ): Promise<UpdateResult> {
     return await this.postRepository.update(id, updatePostDto);
+  }
+
+  async delete(id: number): Promise<DeleteResult> {
+    return this.postRepository.delete(id);
   }
 }

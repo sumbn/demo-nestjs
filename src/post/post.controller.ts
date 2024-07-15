@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -123,5 +124,11 @@ export class PostController {
     }
 
     return this.postService.update(Number(id), updatePostDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.postService.delete(Number(id));
   }
 }
