@@ -3,8 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
-import { Like, Repository } from 'typeorm';
+import { Like, Repository, UpdateResult } from 'typeorm';
 import { FilterPostDto } from 'src/post/dto/filter-post.dto';
+import { updatePostDto } from 'src/post/dto/update-post.dto';
 
 @Injectable()
 export class PostService {
@@ -65,5 +66,28 @@ export class PostService {
       prevPage,
       lastPage,
     };
+  }
+
+  async findDetail(id: number): Promise<Post> {
+    return await this.postRepository.findOne({
+      where: { id },
+      relations: ['user'],
+      select: {
+        user: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar: true,
+        },
+      },
+    });
+  }
+
+  async update(
+    id: number,
+    updatePostDto: updatePostDto,
+  ): Promise<UpdateResult> {
+    return await this.postRepository.update(id, updatePostDto);
   }
 }
