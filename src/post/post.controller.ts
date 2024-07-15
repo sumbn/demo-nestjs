@@ -12,6 +12,8 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storageConfig } from 'helpers/config';
@@ -28,6 +30,7 @@ export class PostController {
   constructor(private postService: PostService) {}
 
   @UseGuards(AuthGuard)
+  @UsePipes(ValidationPipe)
   @Post()
   @UseInterceptors(
     FileInterceptor('thumbnail', {
