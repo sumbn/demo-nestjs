@@ -39,14 +39,14 @@ export class UserService {
     });
     const lastPage = Math.ceil(total / items_per_page);
     const nextPage = page + 1 > lastPage ? null : page + 1;
-    const prePage = page - 1 < 1 ? null : page - 1;
+    const prevPage = page - 1 < 1 ? null : page - 1;
 
     return {
       data: result,
       total,
       currentPage: page,
       nextPage,
-      prePage,
+      prevPage,
       lastPage,
     };
   }

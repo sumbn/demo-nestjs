@@ -2,7 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -13,6 +15,7 @@ import { storageConfig } from 'helpers/config';
 import { extname } from 'path';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
+import { FilterPostDto } from 'src/post/dto/filter-post.dto';
 import { PostService } from 'src/post/post.service';
 
 @Controller('posts')
@@ -63,5 +66,10 @@ export class PostController {
       ...createPostDto,
       thumbnail: file.destination + '/' + file.filename,
     });
+  }
+
+  @Get()
+  findAll(@Query() query: FilterPostDto): Promise<any> {
+    return this.postService.findAll(query);
   }
 }

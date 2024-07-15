@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
 import { Post } from './entities/post.entity';
 import { User } from '../user/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+import { FilterPostDto } from 'src/post/dto/filter-post.dto';
 
 @Injectable()
 export class PostService {
@@ -22,5 +23,47 @@ export class PostService {
     } catch {
       throw new HttpException('cannot create post', HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async findAll(query: FilterPostDto): Promise<any> {
+    const items_per_page = Number(query.items_per_page) || 10;
+    const page = Number(query.page) || 1;
+    const keyWords = query.search || '';
+
+    const skip = (page - 1) * items_per_page;
+    const [res, total] = await this.postRepository.findAndCount({
+      where: [
+        { title: Like('%' + keyWords + '%') },
+        { description: Like('%' + keyWords + '%') },
+      ],
+      order: { created_at: 'DESC' },
+      take: items_per_page,
+      skip: skip,
+      relations: {
+        user: true,
+      },
+      select: {
+        user: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar: true,
+        },
+      },
+    });
+
+    const lastPage = Math.ceil(total / items_per_page);
+    const nextPage = page + 1 > lastPage ? null : page + 1;
+    const prevPage = page - 1 < 1 ? null : page - 1;
+
+    return {
+      data: res,
+      total,
+      currentPage: page,
+      nextPage,
+      prevPage,
+      lastPage,
+    };
   }
 }
